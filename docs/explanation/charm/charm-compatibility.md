@@ -14,8 +14,8 @@ The [Landscape Server charm](https://charmhub.io/landscape-server) requires inte
 - `postgresql`
 - `rabbitmq-server`
 
-**Landscape 26.04 LTS beta+:**
-- `haproxy` (at `2.8/edge`, via `haproxy-route` interface)
+**Landscape 26.04 LTS and later:**
+- `haproxy` (at `2.8/stable`, via `haproxy-route` interface)
 - A TLS certificates provider integrated with HAProxy (e.g., `self-signed-certificates`, `lego`)
 - `landscape-debarchive` (for Deb Archive repository management)
 - `landscape-task-handler` (for task processing)
@@ -35,8 +35,8 @@ Learn more about [Juju integrations](https://canonical.com/juju/integrations).
 
 The Landscape Server charm supports two deployment architectures:
 
-**Landscape 26.04 LTS beta+ (recommended):**
-- External HAProxy charm (`2.8/edge`) for load balancing, using the `haproxy-route` interface
+**Landscape 26.04 LTS and later (recommended):**
+- External HAProxy charm (`2.8/stable`) for load balancing, using the `haproxy-route` interface
 - PostgreSQL 14+ with modern `database` interface
 - TLS certificates via a `tls-certificates` interface provider integrated with HAProxy
 - `landscape-debarchive` charm for Deb Archive repository management
@@ -52,11 +52,11 @@ The Landscape Server charm supports two deployment architectures:
 ```{include} /reuse/charm-ha-architecture-pre-2604.md
 ```
 
-For migration from older deployments to 26.04 beta+, see {ref}`how-to-migrate-to-26-04-charm`.
+For migration from older deployments to 26.04 LTS, see {ref}`how-to-migrate-to-26-04-charm`.
 
 ## Required integrations by version
 
-| Charm                         | Landscape 26.04 LTS beta+                                            | Before 26.04                                    |
+| Charm                         | Landscape 26.04 LTS and later                                        | Before 26.04                                    |
 | ----------------------------- | -------------------------------------------------------------------- | ----------------------------------------------- |
 | **PostgreSQL**                | Required (PostgreSQL 14+, `database` interface)                      | Required (PostgreSQL 14, `pgsql` interface)     |
 | **RabbitMQ Server**           | Required                                                             | Required                                        |
@@ -67,7 +67,7 @@ For migration from older deployments to 26.04 beta+, see {ref}`how-to-migrate-to
 
 ## TLS certificates charm interface
 
-Starting with the 26.04 beta version, TLS is managed by the HAProxy charm. The HAProxy charm integrates with a provider of the [`tls-certificates` charm interface](https://charmhub.io/integrations/tls-certificates) to obtain certificates for HTTPS connections.
+Starting with Landscape 26.04 LTS, TLS is managed by the HAProxy charm. The HAProxy charm integrates with a provider of the [`tls-certificates` charm interface](https://charmhub.io/integrations/tls-certificates) to obtain certificates for HTTPS connections.
 
 ### Available TLS certificate providers
 
@@ -95,8 +95,8 @@ Landscape Server is currently only distributed as a machine (VM) charm and canno
 
 The relationship between Landscape Server and HAProxy varies significantly between Landscape versions:
 
-**Landscape 26.04 LTS beta+:**
-- Requires the HAProxy charm at `2.8/edge`
+**Landscape 26.04 LTS and later:**
+- Requires the HAProxy charm at `2.8/stable`
 - Integrates via 8 `haproxy-route` relation endpoints directly from landscape-server to haproxy
 - HAProxy handles TLS termination and load balancing
 - Cannot be integrated with the `latest/x` channels of the HAProxy charm (different interface)
@@ -119,7 +119,7 @@ For migrating from older deployments to the new HAProxy architecture, see {ref}`
 
 PostgreSQL charm compatibility varies by Landscape Server version:
 
-**Landscape 26.04 LTS beta+:**
+**Landscape 26.04 LTS and later:**
 - Compatible with PostgreSQL 14+ using the modern `database` interface
 - Landscape Server integrates using the `database` relation endpoint: `landscape-server:database` → `postgresql:database`
 - It is recommended to use PostgreSQL 16 for new deployments

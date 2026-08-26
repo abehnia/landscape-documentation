@@ -30,7 +30,7 @@ If you have an Ubuntu Pro subscription, attach your Pro token to each machine th
 When deploying with Juju, you will use a Juju bundle. A bundle is an encapsulation of all of the parts needed to deploy the required services as well as associated relations and configurations that the deployment requires.
 
 ```{important}
-Starting with the **26.04 beta version** of the `landscape-server` charm, the deployment architecture changes to PostgreSQL 14+ over the `database` relation (backed by the `postgresql_client` charm interface), HAProxy 2.8 over `haproxy-route`, and TLS via `tls-certificates`.
+Starting with the **26.04 LTS version** of the `landscape-server` charm, the deployment architecture changes to PostgreSQL 14+ over the `database` relation (backed by the `postgresql_client` charm interface), HAProxy 2.8 over `haproxy-route`, and TLS via `tls-certificates`.
 
 The Charmhub `landscape-scalable` bundle was deprecated in 26.04 and does not have a `26.04/*` track. For 26.04+ deployments, follow {ref}`how-to-juju-ha-installation`.
 ```
@@ -41,7 +41,7 @@ The Charmhub `landscape-scalable` bundle was deprecated in 26.04 and does not ha
 
 The `landscape-scalable` bundle published on Charmhub was deprecated in 26.04 and should not be used for new deployments. It uses the older topology (external HAProxy charm, PostgreSQL 14 over the legacy `pgsql` interface).
 
-For the 26.04 beta+ architecture (recommended), the new deployment approach uses:
+For the 26.04 LTS architecture (recommended), the new deployment approach uses:
 - **External HAProxy charm** (`2.8/stable`) for load balancing via the `haproxy-route` interface
 - PostgreSQL 14+ over the `database` relation (`postgresql_client` interface)
 - TLS certificates provided via the `tls-certificates` interface integrated with HAProxy (e.g., `self-signed-certificates` charm)
@@ -66,7 +66,7 @@ Once the deployment has finished, Landscape Server is accessible in different wa
   - Access via the IP address of the first `haproxy` unit
   - HAProxy typically runs on port 443 (HTTPS)
 
-**26.04 beta+ deployment:**
+**26.04 LTS deployment:**
 
   - HAProxy routes traffic based on the `hostname` set in the `haproxy-route` relation, **not** by port alone, so you must connect using that hostname (for example, with `--resolve` or a DNS entry pointing it at the HAProxy unit's IP). Connecting directly to the HAProxy unit's own IP address (with no matching `Host` header) hits HAProxy's default page instead of Landscape.
   - If you set `root_url`, that hostname is what you must connect with.
@@ -80,5 +80,5 @@ Once the deployment has finished, Landscape Server is accessible in different wa
   - The external HAProxy distributes traffic across Landscape Server units
 
 ```{tip}
-For the 26.04 beta+ deployment, set `root_url` to a real hostname and point that hostname (via DNS or `curl --resolve`) at your HAProxy unit's IP address (or external load balancer) before testing.
+For the 26.04 LTS deployment, set `root_url` to a real hostname and point that hostname (via DNS or `curl --resolve`) at your HAProxy unit's IP address (or external load balancer) before testing.
 ```

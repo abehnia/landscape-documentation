@@ -8,18 +8,18 @@ myst:
 # How to migrate to Landscape 26.04 LTS (charm)
 
 ```{note}
-The Landscape Server charm for 26.04 is currently in beta. See the {ref}`reference-release-notes-26-04-lts` for details on our changes introduced in 26.04. Note the recommendations for repository management users.
+The Landscape Server charm for 26.04 is available in the `26.04/stable` channel. See the {ref}`reference-release-notes-26-04-lts` for details on our changes introduced in 26.04. Note the recommendations for repository management users.
 ```
 
-This guide explains how to migrate from an older Landscape Server charm deployment (pre-26.04) to the 26.04 LTS beta+ version with an external HAProxy charm using the `haproxy-route` interface.
+This guide explains how to migrate from an older Landscape Server charm deployment (pre-26.04) to Landscape 26.04 LTS with an external HAProxy charm using the `haproxy-route` interface.
 
 ## Architectural changes
 
-The 26.04 beta version introduces significant architectural changes:
+Landscape 26.04 LTS introduces significant architectural changes:
 
-| Aspect                   | Landscape 26.04 LTS beta+                                                                         | Pre-26.04                                                    |
+| Aspect                   | Landscape 26.04 LTS                                                                               | Pre-26.04                                                    |
 | ------------------------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| **Load balancing**       | External HAProxy charm (`haproxy` at `2.8/edge`, `haproxy-route` interface)                       | External HAProxy charm (`reverseproxy` interface)            |
+| **Load balancing**       | External HAProxy charm (`haproxy` at `2.8/stable`, `haproxy-route` interface)                     | External HAProxy charm (`reverseproxy` interface)            |
 | **PostgreSQL interface** | Modern `database` interface (PostgreSQL 14+)                                                      | Legacy `pgsql` interface (PostgreSQL 14)                     |
 | **PostgreSQL relation**  | `landscape-server:database` → `postgresql:database`                                               | `landscape-server:db` → `postgresql:db-admin`                |
 | **RabbitMQ relation**    | `landscape-server:inbound-amqp` and `landscape-server:outbound-amqp` → `rabbitmq-server` (25.10+) | `landscape-server:amqp` → `rabbitmq-server:amqp` (pre-25.10) |
@@ -61,7 +61,7 @@ Deploy the HAProxy charm and a TLS certificates provider before refreshing the c
 First, deploy the HAProxy charm:
 
 ```bash
-juju deploy haproxy --channel 2.8/edge
+juju deploy haproxy --channel 2.8/stable
 ```
 
 **For testing/development with self-signed certificates:**
@@ -169,10 +169,10 @@ If the machine ID of the HAProxy charm is not 0, adjust the above command with t
 
 ### Step 4: Refresh the charm
 
-Refresh the Landscape Server charm to the 26.04 beta version:
+Refresh the Landscape Server charm to the 26.04 LTS version:
 
 ```bash
-juju refresh landscape-server --channel 26.04/beta
+juju refresh landscape-server --channel 26.04/stable
 ```
 
 ```{note}
@@ -203,7 +203,7 @@ juju integrate landscape-server:ubuntu-installer-attach-haproxy-route haproxy:ha
 ```
 
 ```{important}
-The `ssl_cert` and `ssl_key` charm configuration have been removed and are no longer supported in the 26.04 beta charm. TLS is now managed by the HAProxy charm via the `tls-certificates` interface.
+The `ssl_cert` and `ssl_key` charm configuration have been removed and are no longer supported in the 26.04 LTS charm. TLS is now managed by the HAProxy charm via the `tls-certificates` interface.
 ```
 
 ### Step 6: Add new RabbitMQ relations (pre-25.10 deployments only)
@@ -224,7 +224,7 @@ juju integrate landscape-server:outbound-amqp rabbitmq-server
 If you want to upgrade to a newer PostgreSQL version (e.g., from 14 to 16) as part of this migration, follow the backup and restore procedures in {ref}`how-to-back-up-restore-tear-down-charmed-deployment` to migrate your data to a new PostgreSQL deployment.
 
 ```{note}
-PostgreSQL upgrade is optional. The 26.04 beta charm uses the modern `database` interface which works with PostgreSQL 14 and above.
+PostgreSQL upgrade is optional. The 26.04 LTS charm uses the modern `database` interface which works with PostgreSQL 14 and above.
 
 The legacy `db` endpoint (legacy `pgsql` interface) is still supported for backwards compatibility but only works with PostgreSQL 14. It is recommended to migrate to the modern `database` interface since Charmed PostgreSQL 16+ does not support the legacy interface.
 ```

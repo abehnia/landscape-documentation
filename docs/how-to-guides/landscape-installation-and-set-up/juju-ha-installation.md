@@ -12,16 +12,16 @@ myst:
 You can create a scalable, high availability (HA) deployment of Landscape Server with Juju. The result is a Juju-managed deployment of Landscape Server and the other services it depends on.
 
 ```{important}
-This guide covers both the **26.04 beta+ deployment approach** and the older **pre-26.04 deployment approach**. The 26.04 beta version integrates directly with the external HAProxy charm (`2.8/stable`) using the `haproxy-route` interface, replacing the older `reverseproxy` interface. For new deployments, use the 26.04 beta+ approach. For existing deployments, see {ref}`how-to-migrate-to-26-04-charm`.
+This guide covers both the **26.04 LTS deployment approach** and the older **pre-26.04 deployment approach**. Landscape 26.04 LTS integrates directly with the external HAProxy charm (`2.8/stable`) using the `haproxy-route` interface, replacing the older `reverseproxy` interface. For new deployments, use the 26.04 LTS approach. For existing deployments, see {ref}`how-to-migrate-to-26-04-charm`.
 
 The Charmhub `landscape-scalable` bundle does not currently publish a `26.04/*` track, so 26.04+ deployments use a custom bundle such as the one shown below.
 ```
 
 ## Architecture overview
 
-### 26.04 beta+ architecture (recommended)
+### 26.04 LTS architecture (recommended)
 
-Starting with the 26.04 beta version, Landscape Server uses the following architecture:
+Starting with Landscape 26.04 LTS, Landscape Server uses the following architecture:
 
 - **Landscape Server units** for the application
 - **HAProxy** charm (`2.8/stable`) for load balancing via the `haproxy-route` interface
@@ -65,14 +65,14 @@ For improved database performance and scalability in high-load deployments, cons
 
 Choose the appropriate deployment approach based on your needs:
 
-- **For new deployments:** Use the 26.04 beta+ approach (recommended)
+- **For new deployments:** Use the 26.04 LTS approach (recommended)
 - **For existing deployments:** Continue with the older approach or migrate using {ref}`how-to-migrate-to-26-04-charm`
 
 ---
 
-## 26.04 beta+ deployment (recommended)
+## 26.04 LTS deployment (recommended)
 
-This section covers deploying Landscape Server with the external HAProxy charm introduced in version 26.04 beta.
+This section covers deploying Landscape Server with the external HAProxy charm introduced in 26.04 LTS.
 
 ### Create a Juju model
 
@@ -82,7 +82,7 @@ juju add-model landscape-ha
 
 ### Deploy with a custom bundle file
 
-For the 26.04 beta+ deployment, you'll create a custom bundle file that includes all the necessary components.
+For the 26.04 LTS deployment, you'll create a custom bundle file that includes all the necessary components.
 
 #### Step 1: Create the bundle file
 
@@ -113,7 +113,7 @@ applications:
 
   landscape-server:
     charm: ch:landscape-server
-    channel: 26.04/edge
+    channel: 26.04/stable
     num_units: 3
     options:
       landscape_ppa: ppa:landscape/self-hosted-26.04
@@ -195,7 +195,7 @@ landscape-ha  lxd         localhost/lxd   3.5.5    unsupported  10:30:00+00:00
 App                               Version  Status  Scale  Charm                             Channel                 Rev  Base
 haproxy                                    active      1  haproxy                           2.8/stable                50  ubuntu@24.04
 landscape-debarchive              242      active      1  landscape-debarchive              latest/edge               2  ubuntu@24.04
-landscape-server                  26.04    active      3  landscape-server                  26.04/beta              150  ubuntu@24.04
+landscape-server                  26.04    active      3  landscape-server                  26.04/stable            150  ubuntu@24.04
 landscape-task-handler                     active      1  landscape-task-handler            latest/edge               1  ubuntu@24.04
 postgresql                        16.4     active      3  postgresql                        16/stable               500  ubuntu@24.04
 rabbitmq-server                   3.9.27   active      3  rabbitmq-server                   latest/edge             200  ubuntu@22.04
@@ -369,7 +369,7 @@ flowchart TD
 ## Pre-26.04 deployment
 
 ```{warning}
-This deployment approach is **deprecated**. For new deployments, use the 26.04 beta+ approach described above. For existing deployments, consider migrating using {ref}`how-to-migrate-to-26-04-charm`.
+This deployment approach is **deprecated**. For new deployments, use the 26.04 LTS approach described above. For existing deployments, consider migrating using {ref}`how-to-migrate-to-26-04-charm`.
 ```
 
 This section covers the older deployment approach using the external HAProxy charm. This approach is maintained for existing deployments only.
@@ -719,7 +719,7 @@ You now have Landscape Server set up for a high-availability deployment. Next, y
 ## Configure SSL certificates (pre-26.04 deployments only)
 
 ```{warning}
-This section applies **only to pre-26.04 deployments** using the external HAProxy charm. For 26.04 beta+ deployments, see the TLS certificates configuration in the 26.04 deployment section above.
+This section applies **only to pre-26.04 deployments** using the external HAProxy charm. For 26.04 LTS deployments, see the TLS certificates configuration in the 26.04 deployment section above.
 ```
 
 ### For pre-26.04 deployments with external HAProxy charm
@@ -751,5 +751,5 @@ juju config haproxy ssl_cert="$(base64 /etc/letsencrypt/live/$FQDN/fullchain.pem
 ```
 
 ```{note}
-Certificate renewal must be handled manually for pre-26.04 deployments. Consider migrating to 26.04 beta+ for automatic certificate management via the `tls-certificates` interface.
+Certificate renewal must be handled manually for pre-26.04 deployments. Consider migrating to 26.04 LTS for automatic certificate management via the `tls-certificates` interface.
 ```
